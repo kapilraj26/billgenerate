@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Vegetable Credit Sales Billing System
+    </title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static',
+          filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>
+        Vegetable Credit Sales Billing System
+    </h1>
+
+    <form method="POST">
+
+        <!-- Language -->
+
+        <div class="row">
+
+            <div class="input-box">
+
+                <label>
+                    Language
+                </label>
+
+                <select id="language"
+                        onchange="changeLanguage()">
+
+                    <option value="en">
+                        English
+                    </option>
+
+                    <option value="ta">
+                        தமிழ்
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+        <!-- Customer Details -->
+
+        <div class="row">
+
+            <div class="input-box">
+
+                <label id="lbl_phone">
+                    Phone Number
+                </label>
+
+                <input type="text"
+                       id="phone"
+                       name="phone"
+                       required>
+
+            </div>
+
+            <div class="input-box">
+
+                <label id="lbl_customer">
+                    Customer Name
+                </label>
+
+                <input type="text"
+                       id="customer"
+                       name="customer"
+                       required>
+
+            </div>
+
+        </div>
+
+        <!-- Balance -->
+
+        <div class="row">
+
+            <div class="input-box">
+
+                <label id="lbl_pending">
+                    Previous Balance
+                </label>
+
+                <input type="number"
+                       id="pending"
+                       name="pending"
+                       value="0"
+                       readonly>
+
+            </div>
+
+            <div class="input-box">
+
+                <label id="lbl_received">
+                    Cash Received
+                </label>
+
+                <input type="number"
+                       name="received"
+                       value="0">
+
+            </div>
+
+        </div>
+
+        <h2 id="lbl_product">
+            Product Details
+        </h2>
+
+        <table id="items">
+
+            <tr>
+
+                <th id="th_product">
+                    Product
+                </th>
+
+                <th id="th_qty">
+                    Quantity
+                </th>
+
+                <th id="th_rate">
+                    Rate
+                </th>
+
+                <th id="th_remove">
+                    Remove
+                </th>
+
+            </tr>
+
+            <tr>
+
+                <td>
+                    <input type="text"
+                           name="product[]"
+                           required>
+                </td>
+
+                <td>
+                    <input type="number"
+                           step="0.01"
+                           name="qty[]"
+                           required>
+                </td>
+
+                <td>
+                    <input type="number"
+                           step="0.01"
+                           name="rate[]"
+                           required>
+                </td>
+
+                <td>
+
+                    <button type="button"
+                            onclick="removeRow(this)">
+                        X
+                    </button>
+
+                </td>
+
+            </tr>
+
+        </table>
+
+        <br>
+
+        <button type="button"
+                onclick="addRow()">
+            Add Product
+        </button>
+
+        <button type="submit">
+            Generate Bill
+        </button>
+
+    </form>
+
+</div>
+
+<script>
+
+function addRow() {
+
+    let table =
+        document.getElementById("items");
+
+    let row =
+        table.insertRow();
+
+    row.innerHTML = `
+
+        <td>
+            <input type="text"
+                   name="product[]"
+                   required>
+        </td>
+
+        <td>
+            <input type="number"
+                   step="0.01"
+                   name="qty[]"
+                   required>
+        </td>
+
+        <td>
+            <input type="number"
+                   step="0.01"
+                   name="rate[]"
+                   required>
+        </td>
+
+        <td>
+            <button type="button"
+                    onclick="removeRow(this)">
+                X
+            </button>
+        </td>
+
+    `;
+}
+
+function removeRow(button) {
+
+    let row =
+        button.parentNode.parentNode;
+
+    let table =
+        document.getElementById("items");
+
+    if (table.rows.length > 2) {
+        row.remove();
+    }
+}
+
+/* Customer Search */
+
+document.getElementById("phone")
+.addEventListener("blur", function () {
+
+    let phone = this.value;
+
+    fetch("/customer/" + phone)
+
+    .then(response => response.json())
+
+    .then(data => {
+
+        if (data.name !== "") {
+
+            document.getElementById(
+                "customer"
+            ).value = data.name;
+
+            document.getElementById(
+                "pending"
+            ).value = data.balance;
+        }
+    });
+
+});
+
+/* Language */
+
+function changeLanguage() {
+
+    let lang =
+        document.getElementById(
+            "language"
+        ).value;
+
+    if (lang === "ta") {
+
+        document.getElementById(
+            "lbl_phone"
+        ).innerHTML =
+        "தொலைபேசி எண்";
+
+        document.getElementById(
+            "lbl_customer"
+        ).innerHTML =
+        "வாடிக்கையாளர் பெயர்";
+
+        document.getElementById(
+            "lbl_pending"
+        ).innerHTML =
+        "முந்தைய நிலுவை";
+
+        document.getElementById(
+            "lbl_received"
+        ).innerHTML =
+        "பெறப்பட்ட தொகை";
+
+        document.getElementById(
+            "lbl_product"
+        ).innerHTML =
+        "பொருள் விவரங்கள்";
+
+        document.getElementById(
+            "th_product"
+        ).innerHTML =
+        "பொருள்";
+
+        document.getElementById(
+            "th_qty"
+        ).innerHTML =
+        "அளவு";
+
+        document.getElementById(
+            "th_rate"
+        ).innerHTML =
+        "விலை";
+
+        document.getElementById(
+            "th_remove"
+        ).innerHTML =
+        "நீக்கு";
+    }
+
+    else {
+
+        document.getElementById(
+            "lbl_phone"
+        ).innerHTML =
+        "Phone Number";
+
+        document.getElementById(
+            "lbl_customer"
+        ).innerHTML =
+        "Customer Name";
+
+        document.getElementById(
+            "lbl_pending"
+        ).innerHTML =
+        "Previous Balance";
+
+        document.getElementById(
+            "lbl_received"
+        ).innerHTML =
+        "Cash Received";
+
+        document.getElementById(
+            "lbl_product"
+        ).innerHTML =
+        "Product Details";
+
+        document.getElementById(
+            "th_product"
+        ).innerHTML =
+        "Product";
+
+        document.getElementById(
+            "th_qty"
+        ).innerHTML =
+        "Quantity";
+
+        document.getElementById(
+            "th_rate"
+        ).innerHTML =
+        "Rate";
+
+        document.getElementById(
+            "th_remove"
+        ).innerHTML =
+        "Remove";
+    }
+}
+
+</script>
+
+</body>
+
+</html>

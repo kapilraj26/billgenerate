@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Daily Sales Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static',
+          filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Daily Sales Report</h1>
+
+    <h2>{{ today }}</h2>
+
+    <div class="cards">
+
+        <div class="card">
+            <h3>Total Bills</h3>
+            <h1>{{ report.bills }}</h1>
+        </div>
+
+        <div class="card">
+            <h3>Total Sales</h3>
+            <h1>₹{{ report.sales }}</h1>
+        </div>
+
+        <div class="card">
+            <h3>Cash Received</h3>
+            <h1>₹{{ report.received }}</h1>
+        </div>
+
+        <div class="card">
+            <h3>Pending Amount</h3>
+            <h1>₹{{ report.balance }}</h1>
+        </div>
+
+    </div>
+
+    <br>
+
+    <a href="/">
+        <button>New Bill</button>
+    </a>
+
+    <a href="/history">
+        <button>Bill History</button>
+    </a>
+
+</div>
+
+</body>
+</html>

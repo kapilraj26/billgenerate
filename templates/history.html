@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Bill History</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static',
+          filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Bill History</h1>
+
+    <table>
+
+        <tr>
+            <th>Bill No</th>
+            <th>Customer</th>
+            <th>Date</th>
+            <th>Total</th>
+            <th>Balance</th>
+        </tr>
+
+        {% for bill in bills %}
+
+        <tr>
+
+            <td>
+                <a href="/bill/{{ bill.bill_no }}">
+                    {{ bill.bill_no }}
+                </a>
+            </td>
+
+            <td>
+                {{ bill.customer_name }}
+            </td>
+
+            <td>
+                {{ bill.bill_date }}
+            </td>
+
+            <td>
+                ₹{{ bill.grand_total }}
+            </td>
+
+            <td>
+                ₹{{ bill.balance }}
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    <br>
+
+    <a href="/">
+        <button>
+            New Bill
+        </button>
+    </a>
+
+</div>
+
+</body>
+</html>
