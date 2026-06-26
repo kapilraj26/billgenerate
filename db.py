@@ -1,10 +1,11 @@
 import mysql.connector
 
-connection = mysql.connector.connect(
-    host="localhost",
+db = mysql.connector.connect(
+    host="mysql.railway.internal",
+    port=3306,
     user="root",
-    password="kapil26",
-    database="vegetable_billing"
+    password="ZEcmLtSTaYcgKTlBgoVevaiiwzhGOYIz",
+    database="railway"
 )
 
-cursor = connection.cursor(dictionary=True)
+cursor = db.cursor(dictionary=True)

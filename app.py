@@ -34,11 +34,17 @@ SHOP_PHONE = "9094415150"
 # DATABASE CONNECTION
 # ==========================
 
+
+import os
+import mysql.connector
+
 db = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="kapil26",      # your mysql password
-    database="vegetable_billing"
+    host=os.environ["mysql.railway.internal"],
+    port=int(os.environ["3306"]),
+    user=os.environ["root"],
+    password=os.environ["ZEcmLtSTaYcgKTlBgoVevaiiwzhGOYIz"],
+    database=os.environ["railway"],
+    autocommit=True
 )
 
 cursor = db.cursor(dictionary=True)
