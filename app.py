@@ -27,7 +27,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 app = Flask(__name__)
 app.secret_key = "vegetable_secret"
 
-SHOP_NAME = "J45 MANO"
+SHOP_NAME = "MANOGARAN"
 SHOP_PHONE = "9094415150"
 
 # ==========================
