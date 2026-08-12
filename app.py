@@ -34,7 +34,7 @@ from reportlab.pdfbase.ttfonts import TTFont
 app = Flask(__name__)
 app.secret_key = "vegetable_secret"
 
-SHOP_NAME = "J45 MANO"
+SHOP_NAME = "MANOGARAN"
 SHOP_PHONE = "9094415150"
 
 # ==========================
@@ -46,11 +46,11 @@ import os
 import mysql.connector
 
 db = mysql.connector.connect(
-    host=os.getenv("MYSQLHOST"),
-    port=int(os.getenv("MYSQLPORT")),
-    user=os.getenv("MYSQLUSER"),
-    password=os.getenv("MYSQLPASSWORD"),
-    database=os.getenv("MYSQLDATABASE"),
+    host=os.getenv("DB_HOST"),
+    port=int(os.getenv("DB_PORT")),
+    user=os.getenv("DB_USER"),
+    password=os.getenv("DB_PASSWORD"),
+    database=os.getenv("DB_NAME"),
     autocommit=True
 )
 
