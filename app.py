@@ -37,7 +37,7 @@ SHOP_PHONE = "9094415150"
 
 import os
 import mysql.connector
-
+<meta charset="UTF-8">
 import os
 import mysql.connector
 
@@ -47,6 +47,8 @@ db = mysql.connector.connect(
     user=os.getenv("DB_USER"),
     password=os.getenv("DB_PASSWORD"),
     database=os.getenv("DB_NAME"),
+    charset="utf8mb4",
+    collation="utf8mb4_unicode_ci",
     ssl_disabled=False,
     autocommit=True
 )
