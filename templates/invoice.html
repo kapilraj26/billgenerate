@@ -18,7 +18,7 @@
 
 <body>
 
-<div class="bill">
+<div class="bill" id="invoice">
 
     <!-- Header -->
 
@@ -187,53 +187,7 @@
 
     <br>
 
-    <!-- Buttons -->
-
-    <div class="buttons">
-
-        <a href="/pdf">
-
-            <button type="button">
-                Download PDF
-            </button>
-
-        </a>
-
-        <a href="/history">
-
-            <button type="button">
-                Bill History
-            </button>
-
-        </a>
-
-        <a href="/dashboard">
-
-            <button type="button">
-                Dashboard
-            </button>
-
-        </a>
-
-        <a href="/">
-
-            <button type="button">
-                New Bill
-            </button>
-
-        </a>
-
-        <a href="/logout">
-
-            <button type="button">
-                Logout
-            </button>
-
-        </a>
-
-    </div>
-
-    <br>
+    <!-- Thank You -->
 
     <center>
 
@@ -244,6 +198,131 @@
     </center>
 
 </div>
+
+
+<!-- Buttons are outside the invoice so they are NOT included in the shared image -->
+
+<div class="buttons">
+
+    <button type="button" onclick="shareInvoice()">
+        📤 Share Invoice
+    </button>
+
+    <a href="/history">
+        <button type="button">
+            Bill History
+        </button>
+    </a>
+
+    <a href="/dashboard">
+        <button type="button">
+            Dashboard
+        </button>
+    </a>
+
+    <a href="/">
+        <button type="button">
+            New Bill
+        </button>
+    </a>
+
+    <a href="/logout">
+        <button type="button">
+            Logout
+        </button>
+    </a>
+
+</div>
+
+
+<!-- html2canvas: converts the invoice into an image -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script>
+
+async function shareInvoice() {
+
+    const invoice = document.getElementById("invoice");
+
+    if (!invoice) {
+        alert("Invoice not found!");
+        return;
+    }
+
+    try {
+
+        const canvas = await html2canvas(invoice, {
+            scale: 2,
+            useCORS: true,
+            backgroundColor: "#ffffff"
+        });
+
+        const blob = await new Promise(resolve => {
+            canvas.toBlob(resolve, "image/png", 1.0);
+        });
+
+        if (!blob) {
+            throw new Error("Could not create invoice image.");
+        }
+
+        const file = new File(
+            [blob],
+            "J45-Invoice.png",
+            {
+                type: "image/png"
+            }
+        );
+
+        // Mobile browsers: open the native share sheet
+        if (
+            navigator.share &&
+            navigator.canShare &&
+            navigator.canShare({ files: [file] })
+        ) {
+
+            await navigator.share({
+                title: "J45 Vegetable Billing",
+                text: "Invoice",
+                files: [file]
+            });
+
+        } else {
+
+            // Desktop / unsupported browser fallback
+            const link = document.createElement("a");
+
+            link.download = "J45-Invoice.png";
+
+            link.href = URL.createObjectURL(blob);
+
+            document.body.appendChild(link);
+
+            link.click();
+
+            document.body.removeChild(link);
+
+            setTimeout(() => {
+                URL.revokeObjectURL(link.href);
+            }, 1000);
+
+            alert(
+                "Image sharing is not supported here. Invoice image downloaded."
+            );
+        }
+
+    } catch (error) {
+
+        console.error(error);
+
+        // User closing the share sheet is not an error
+        if (error.name !== "AbortError") {
+            alert("Unable to share invoice image.");
+        }
+    }
+}
+
+</script>
 
 </body>
 
