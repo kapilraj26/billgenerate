@@ -47,7 +47,7 @@ app.secret_key = os.getenv(
 # SHOP DETAILS
 # =========================================================
 
-SHOP_NAME = "J45 MANO"
+SHOP_NAME = "MANOGARAN"
 SHOP_PHONE = "9094415150"
 
 
