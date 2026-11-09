@@ -22,9 +22,9 @@
 
         .invoice {
             width: 100%;
-            max-width: 732px;
+            max-width: 840px;
             margin: auto;
-            padding: 30px;
+            padding: 34px;
             background: white;
             border: 1px solid #333;
         }
@@ -48,20 +48,20 @@
             color: green;
             font-size: 30px;
             font-weight: bold;
-            margin: 0 0 18px;
+            margin: 0 0 10px;
         }
 
-        .details {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 16px;
+        .shop-phone {
+            color: black;
+            font-size: 18px;
             font-weight: bold;
+            text-align: center;
+            margin-bottom: 12px;
         }
 
-        /* DATE SIZE INCREASED */
-
-        .details span:last-child {
+        .date-row {
+            display: flex;
+            justify-content: flex-end;
             color: green;
             font-size: 20px;
             font-weight: bold;
@@ -95,7 +95,7 @@
 
         .product-table th {
             background: #287b36;
-            color: yellow;
+            color: white;
             font-weight: bold;
         }
 
@@ -173,7 +173,7 @@
         /* BUTTONS */
 
         .buttons {
-            max-width: 732px;
+            max-width: 840px;
             margin: 22px auto;
             display: flex;
             flex-wrap: wrap;
@@ -214,11 +214,11 @@
                 font-size: 24px;
             }
 
-            .details {
-                font-size: 12px;
+            .shop-phone {
+                font-size: 16px;
             }
 
-            .details span:last-child {
+            .date-row {
                 font-size: 16px;
             }
 
@@ -278,9 +278,11 @@
             G.மனோகரன்
         </div>
 
-        <div class="details">
-            <span>9094415150</span>
+        <div class="shop-phone">
+            9094415150
+        </div>
 
+        <div class="date-row">
             <span>
                 <strong>Date :</strong> {{ today }}
             </span>
