@@ -29,6 +29,7 @@
             padding: 34px;
             background: white;
             border: 1px solid #333;
+            box-sizing: border-box;
         }
 
         /* ALL INVOICE TEXT - 17PX */
@@ -91,14 +92,18 @@
 
         .product-table {
             width: 100%;
+            table-layout: fixed;
             border-collapse: collapse;
         }
 
         .product-table th,
         .product-table td {
+            width: 25%;
             border: 1px solid #ccc;
             padding: 11px 7px;
             text-align: center;
+            vertical-align: middle;
+            overflow-wrap: break-word;
         }
 
         .product-table th {
@@ -124,27 +129,27 @@
             font-weight: bold;
         }
 
-        /* SUMMARY TABLE */
+        /* SUMMARY TABLE - SAME WIDTH */
 
         .summary-wrapper {
-            display: flex;
-            justify-content: flex-end;
+            display: block;
+            width: 100%;
             margin-top: 18px;
         }
 
         .summary-table {
-            width: 52%;
+            width: 100%;
+            table-layout: fixed;
             border-collapse: collapse;
         }
 
         .summary-table td {
+            width: 50%;
             border: 1px solid #ccc;
             padding: 11px 8px;
             text-align: center;
-        }
-
-        .summary-table td:first-child {
-            width: 65%;
+            vertical-align: middle;
+            overflow-wrap: break-word;
         }
 
         .previous-balance td {
@@ -229,7 +234,7 @@
             }
 
             .summary-table {
-                width: 75%;
+                width: 100%;
             }
         }
 
@@ -243,6 +248,8 @@
             }
 
             .invoice {
+                width: 100%;
+                max-width: 840px;
                 border: 1px solid #333;
             }
 
@@ -299,6 +306,13 @@
     <!-- PRODUCT TABLE -->
 
     <table class="product-table">
+
+        <colgroup>
+            <col style="width: 25%;">
+            <col style="width: 25%;">
+            <col style="width: 25%;">
+            <col style="width: 25%;">
+        </colgroup>
 
         <thead>
             <tr>
