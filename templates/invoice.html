@@ -3,16 +3,79 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>{{ title | default('ஸ்ரீ கருப்பையா துணை', true) }}</title>
+    <title>ஸ்ரீ கருப்பையா துணை - Invoice</title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .bill {
+            background: white;
+            padding: 20px;
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .top-left p,
+        .top-right p {
+            margin: 5px 0;
+        }
+
+        .top-right {
+            text-align: right;
+        }
+
+        .shop-title {
+            text-align: center;
+            color: #8B4513;
+            margin: 12px 0 20px;
+        }
+
+        .shop-name {
+            text-align: center;
+            color: green;
+        }
+
+        .grand-total {
+            color: blue;
+            font-weight: bold;
+        }
+
+        .green-row td {
+            color: green;
+            font-weight: bold;
+        }
+
+        .red-row td {
+            color: red;
+            font-weight: bold;
+        }
+
+        .balance td {
+            background: #ffe5e5;
+            color: red;
+            font-weight: bold;
+        }
+
+        .summary {
+            width: 50%;
+            margin-left: auto;
+        }
+
+        .buttons {
+            text-align: center;
+            margin: 20px;
+        }
+    </style>
 
 </head>
 
@@ -20,31 +83,44 @@
 
 <div class="bill" id="invoice">
 
-    <!-- Tamil Shop Title -->
+    <!-- Tamil Title -->
 
-    <center>
-        <h2>{{ title | default('ஸ்ரீ கருப்பையா துணை', true) }}</h2>
-    </center>
+    <h3 class="shop-title">
+        ஸ்ரீ கருப்பையா துணை
+    </h3>
 
-    <!-- Header -->
+    <!-- Date, Phone and Bill Number -->
 
     <div class="top">
 
-        <div>
-            <strong>Date :</strong>
-            {{ today }}
+        <div class="top-left">
+
+            <p>
+                <strong>Date :</strong>
+                {{ today }}
+            </p>
+
+            <p>
+                <strong>Bill No :</strong>
+                {{ bill_no }}
+            </p>
+
         </div>
 
-        <div>
-            <strong>Bill No :</strong>
-            {{ bill_no }}
+        <div class="top-right">
+
+            <p>
+                <strong>Phone :</strong>
+                {{ shop_phone }}
+            </p>
+
         </div>
 
     </div>
 
-    <h1>{{ shop }}</h1>
+    <!-- Shop Details -->
 
-    <h3>{{ shop_phone }}</h3>
+    <h1 class="shop-name">{{ shop }}</h1>
 
     <hr>
 
@@ -80,7 +156,6 @@
         {% for item in items %}
 
         <tr>
-
             <td>{{ item.product }}</td>
 
             <td>{{ "%.2f"|format(item.qty) }}</td>
@@ -88,7 +163,6 @@
             <td>₹{{ "%.2f"|format(item.rate) }}</td>
 
             <td>₹{{ "%.2f"|format(item.amount) }}</td>
-
         </tr>
 
         {% endfor %}
@@ -102,7 +176,7 @@
                 </strong>
             </td>
 
-            <td colspan="2">
+            <td colspan="2" class="grand-total">
                 <strong>
                     Grand Total :
                     ₹{{ "%.2f"|format(grand_total) }}
@@ -119,33 +193,24 @@
 
     <table class="summary">
 
-        <tr>
+        <tr class="red-row">
             <td>Previous Balance</td>
             <td>₹{{ "%.2f"|format(pending) }}</td>
         </tr>
 
-        <tr>
+        <tr class="green-row">
             <td>Net Bill Amount</td>
             <td>₹{{ "%.2f"|format(net_bill) }}</td>
         </tr>
 
-        <tr>
+        <tr class="green-row">
             <td>Cash Received</td>
             <td>₹{{ "%.2f"|format(received) }}</td>
         </tr>
 
         <tr class="balance">
-
-            <td>
-                <strong>Remaining Balance</strong>
-            </td>
-
-            <td>
-                <strong>
-                    ₹{{ "%.2f"|format(balance) }}
-                </strong>
-            </td>
-
+            <td>Remaining Balance</td>
+            <td>₹{{ "%.2f"|format(balance) }}</td>
         </tr>
 
     </table>
@@ -158,7 +223,7 @@
 
 </div>
 
-<!-- Buttons outside invoice image -->
+<!-- Buttons -->
 
 <div class="buttons">
 
@@ -180,7 +245,7 @@
 
 </div>
 
-<!-- html2canvas -->
+<!-- Image Sharing -->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
@@ -189,11 +254,6 @@
 async function shareInvoice() {
 
     const invoice = document.getElementById("invoice");
-
-    if (!invoice) {
-        alert("Invoice not found!");
-        return;
-    }
 
     try {
 
@@ -208,7 +268,7 @@ async function shareInvoice() {
         });
 
         if (!blob) {
-            throw new Error("Could not create invoice image.");
+            throw new Error("Image creation failed");
         }
 
         const file = new File(
@@ -236,13 +296,9 @@ async function shareInvoice() {
             link.download = "J45-Invoice.png";
             link.href = URL.createObjectURL(blob);
 
-            document.body.appendChild(link);
             link.click();
-            document.body.removeChild(link);
 
-            setTimeout(() => {
-                URL.revokeObjectURL(link.href);
-            }, 1000);
+            URL.revokeObjectURL(link.href);
 
             alert("Invoice image downloaded.");
 
