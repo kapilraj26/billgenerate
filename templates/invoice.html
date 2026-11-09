@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,17 +9,22 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>Invoice</title>
+    <title>{{ title | default('ஸ்ரீ கருப்பையா துணை', true) }}</title>
 
     <link rel="stylesheet"
-          href="{{ url_for('static',
-          filename='style.css') }}">
+          href="{{ url_for('static', filename='style.css') }}">
 
 </head>
 
 <body>
 
 <div class="bill" id="invoice">
+
+    <!-- Tamil Shop Title -->
+
+    <center>
+        <h2>{{ title | default('ஸ்ரீ கருப்பையா துணை', true) }}</h2>
+    </center>
 
     <!-- Header -->
 
@@ -65,33 +71,23 @@
     <table>
 
         <tr>
-
             <th>Product</th>
             <th>Quantity</th>
             <th>Rate</th>
             <th>Amount</th>
-
         </tr>
 
         {% for item in items %}
 
         <tr>
 
-            <td>
-                {{ item.product }}
-            </td>
+            <td>{{ item.product }}</td>
 
-            <td>
-                {{ "%.2f"|format(item.qty) }}
-            </td>
+            <td>{{ "%.2f"|format(item.qty) }}</td>
 
-            <td>
-                ₹{{ "%.2f"|format(item.rate) }}
-            </td>
+            <td>₹{{ "%.2f"|format(item.rate) }}</td>
 
-            <td>
-                ₹{{ "%.2f"|format(item.amount) }}
-            </td>
+            <td>₹{{ "%.2f"|format(item.amount) }}</td>
 
         </tr>
 
@@ -100,21 +96,17 @@
         <tr class="totalrow">
 
             <td colspan="2">
-
                 <strong>
                     Total Quantity :
                     {{ "%.2f"|format(total_qty) }}
                 </strong>
-
             </td>
 
             <td colspan="2">
-
                 <strong>
                     Grand Total :
                     ₹{{ "%.2f"|format(grand_total) }}
                 </strong>
-
             </td>
 
         </tr>
@@ -128,57 +120,30 @@
     <table class="summary">
 
         <tr>
-
-            <td>
-                Previous Balance
-            </td>
-
-            <td>
-                ₹{{ "%.2f"|format(pending) }}
-            </td>
-
+            <td>Previous Balance</td>
+            <td>₹{{ "%.2f"|format(pending) }}</td>
         </tr>
 
         <tr>
-
-            <td>
-                Net Bill Amount
-            </td>
-
-            <td>
-                ₹{{ "%.2f"|format(net_bill) }}
-            </td>
-
+            <td>Net Bill Amount</td>
+            <td>₹{{ "%.2f"|format(net_bill) }}</td>
         </tr>
 
         <tr>
-
-            <td>
-                Cash Received
-            </td>
-
-            <td>
-                ₹{{ "%.2f"|format(received) }}
-            </td>
-
+            <td>Cash Received</td>
+            <td>₹{{ "%.2f"|format(received) }}</td>
         </tr>
 
         <tr class="balance">
 
             <td>
-
-                <strong>
-                    Remaining Balance
-                </strong>
-
+                <strong>Remaining Balance</strong>
             </td>
 
             <td>
-
                 <strong>
                     ₹{{ "%.2f"|format(balance) }}
                 </strong>
-
             </td>
 
         </tr>
@@ -187,20 +152,13 @@
 
     <br>
 
-    <!-- Thank You -->
-
     <center>
-
-        <h4>
-            Thank You Visit Again
-        </h4>
-
+        <h4>Thank You Visit Again</h4>
     </center>
 
 </div>
 
-
-<!-- Buttons are outside the invoice so they are NOT included in the shared image -->
+<!-- Buttons outside invoice image -->
 
 <div class="buttons">
 
@@ -209,33 +167,20 @@
     </button>
 
     <a href="/history">
-        <button type="button">
-            Bill History
-        </button>
+        <button type="button">Bill History</button>
     </a>
 
     <a href="/dashboard">
-        <button type="button">
-            Dashboard
-        </button>
+        <button type="button">Dashboard</button>
     </a>
 
     <a href="/">
-        <button type="button">
-            New Bill
-        </button>
-    </a>
-
-    <a href="/logout">
-        <button type="button">
-            Logout
-        </button>
+        <button type="button">New Bill</button>
     </a>
 
 </div>
 
-
-<!-- html2canvas: converts the invoice into an image -->
+<!-- html2canvas -->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
@@ -269,12 +214,9 @@ async function shareInvoice() {
         const file = new File(
             [blob],
             "J45-Invoice.png",
-            {
-                type: "image/png"
-            }
+            { type: "image/png" }
         );
 
-        // Mobile browsers: open the native share sheet
         if (
             navigator.share &&
             navigator.canShare &&
@@ -282,48 +224,43 @@ async function shareInvoice() {
         ) {
 
             await navigator.share({
-                title: "J45 Vegetable Billing",
-                text: "Invoice",
+                title: "ஸ்ரீ கருப்பையா துணை",
+                text: "Vegetable Billing Invoice",
                 files: [file]
             });
 
         } else {
 
-            // Desktop / unsupported browser fallback
             const link = document.createElement("a");
 
             link.download = "J45-Invoice.png";
-
             link.href = URL.createObjectURL(blob);
 
             document.body.appendChild(link);
-
             link.click();
-
             document.body.removeChild(link);
 
             setTimeout(() => {
                 URL.revokeObjectURL(link.href);
             }, 1000);
 
-            alert(
-                "Image sharing is not supported here. Invoice image downloaded."
-            );
+            alert("Invoice image downloaded.");
+
         }
 
     } catch (error) {
 
         console.error(error);
 
-        // User closing the share sheet is not an error
         if (error.name !== "AbortError") {
             alert("Unable to share invoice image.");
         }
+
     }
+
 }
 
 </script>
 
 </body>
-
 </html>
