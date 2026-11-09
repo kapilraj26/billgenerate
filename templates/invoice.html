@@ -1,448 +1,316 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ஸ்ரீ கருப்பையா துணை - Invoice</title>
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
 
-        .bill {
-            background: #ffffff;
+        body {
+            margin: 0;
             padding: 20px;
+            background: #f2f2f2;
+            font-family: Arial, sans-serif;
         }
 
-        /* Tamil Heading */
+        .invoice {
+            max-width: 650px;
+            margin: auto;
+            padding: 25px;
+            background: white;
+            border: 2px solid #333;
+        }
 
-        .shop-title {
+        .header {
             text-align: center;
-            color: #8B4513;
-            margin: 10px 0;
+            border-bottom: 2px solid #333;
+            padding-bottom: 12px;
         }
 
-        .shop-name {
-            text-align: center;
-            color: green;
-            margin: 8px 0 20px;
-        }
-
-        /* Phone and Date */
-
-        .invoice-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 14px;
+        .tamil-title {
+            color: #8b4513;
+            font-size: 25px;
+            font-weight: bold;
             margin-bottom: 8px;
         }
 
-        /* Grand Total */
-
-        .grand-total {
-            color: blue;
+        .shop-name {
+            color: green;
+            font-size: 27px;
             font-weight: bold;
+            margin-bottom: 12px;
         }
 
-        /* Previous Balance */
+        .details {
+            display: flex;
+            justify-content: space-between;
+            font-size: 15px;
+            font-weight: bold;
+            gap: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 18px;
+        }
+
+        th, td {
+            border: 1px solid #333;
+            padding: 9px 6px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        th {
+            background: #e8e8e8;
+        }
+
+        .summary td:first-child {
+            text-align: left;
+            font-weight: bold;
+        }
 
         .previous-balance td {
             color: red;
             font-weight: bold;
         }
 
-        /* Net Bill and Cash Received */
+        .blue-row td {
+            color: blue;
+            font-weight: bold;
+        }
 
         .green-row td {
             color: green;
             font-weight: bold;
         }
 
-        /* Remaining Balance */
+        .grand-total td {
+            color: blue;
+            font-weight: bold;
+            font-size: 16px;
+        }
 
         .balance td {
             color: red;
             background: #ffe5e5;
             font-weight: bold;
+            font-size: 16px;
         }
 
-        /* Summary Table */
-
-        .summary {
-            width: 50%;
-            margin-left: auto;
+        .customer-details {
+            margin-top: 15px;
+            font-size: 15px;
+            line-height: 1.8;
         }
-
-        /* Buttons */
 
         .buttons {
-            text-align: center;
-            margin: 20px;
+            max-width: 650px;
+            margin: 20px auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
         }
 
-        .buttons button {
-            margin: 5px;
-            padding: 10px 15px;
+        button {
+            padding: 11px 18px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            background: #198754;
+            font-size: 14px;
             cursor: pointer;
         }
 
-    </style>
+        button:hover {
+            opacity: 0.85;
+        }
 
+        .history {
+            background: #0d6efd;
+        }
+
+        .dashboard {
+            background: #6c757d;
+        }
+
+        .new-bill {
+            background: #fd7e14;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .invoice {
+                border: 2px solid #333;
+            }
+
+            .buttons {
+                display: none;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-<!-- INVOICE -->
+<div class="invoice" id="invoice">
 
-<div class="bill" id="invoice">
+    <div class="header">
+        <div class="tamil-title">ஸ்ரீ கருப்பையா துணை</div>
 
-    <!-- SHOP TITLE -->
+        <div class="shop-name">G.மனோகரன்</div>
 
-    <h3 class="shop-title">
-        ஸ்ரீ கருப்பையா துணை
-    </h3>
-
-    <h1 class="shop-name">
-        G.மனோகரன்
-    </h1>
-
-    <!-- PHONE AND DATE -->
-
-    <div class="invoice-header">
-
-        <strong>
-            9094415150
-        </strong>
-
-        <strong>
-            Date : {{ today }}
-        </strong>
-
+        <div class="details">
+            <span>9094415150</span>
+            <span><strong>Date :</strong> {{ today }}</span>
+        </div>
     </div>
 
-    <hr>
-
-    <!-- CUSTOMER DETAILS -->
-
-    <div class="customer">
-
-        <p>
-            <strong>Customer :</strong>
-            {{ customer }}
-        </p>
-
-        <p>
-            <strong>Phone :</strong>
-            {{ phone }}
-        </p>
-
+    <div class="customer-details">
+        <strong>Customer Name:</strong> {{ customer }}<br>
+        <strong>Phone Number:</strong> {{ phone }}
     </div>
-
-    <br>
-
-    <!-- PRODUCT TABLE -->
 
     <table>
+        <thead>
+            <tr>
+                <th>S.No</th>
+                <th>Product</th>
+                <th>Quantity (Kg)</th>
+                <th>Rate</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
 
-        <tr>
-
-            <th>Product</th>
-            <th>Quantity</th>
-            <th>Rate</th>
-            <th>Amount</th>
-
-        </tr>
-
-        {% for item in items %}
-
-        <tr>
-
-            <td>
-                {{ item.product }}
-            </td>
-
-            <td>
-                {{ "%.2f"|format(item.qty) }}
-            </td>
-
-            <td>
-                ₹{{ "%.2f"|format(item.rate) }}
-            </td>
-
-            <td>
-                ₹{{ "%.2f"|format(item.amount) }}
-            </td>
-
-        </tr>
-
-        {% endfor %}
-
-        <!-- TOTAL QUANTITY AND GRAND TOTAL -->
-
-        <tr class="totalrow">
-
-            <td colspan="2">
-
-                <strong>
-                    Total Quantity :
-                    {{ "%.2f"|format(total_qty) }}
-                </strong>
-
-            </td>
-
-            <td colspan="2" class="grand-total">
-
-                <strong>
-                    Grand Total :
-                    ₹{{ "%.2f"|format(grand_total) }}
-                </strong>
-
-            </td>
-
-        </tr>
-
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ item.product }}</td>
+                <td>{{ item.qty }}</td>
+                <td>{{ item.rate }}</td>
+                <td>{{ item.amount }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
-
-    <br>
-
-    <!-- BILL SUMMARY -->
 
     <table class="summary">
-
-        <!-- PREVIOUS BALANCE -->
+        <tr>
+            <td>Total Quantity</td>
+            <td>{{ total_qty }}</td>
+        </tr>
 
         <tr class="previous-balance">
-
-            <td>
-                Previous Balance
-            </td>
-
-            <td>
-                ₹{{ "%.2f"|format(pending) }}
-            </td>
-
+            <td>Previous Balance</td>
+            <td>₹ {{ pending }}</td>
         </tr>
-
-        <!-- NET BILL AMOUNT -->
 
         <tr class="blue-row">
-
-            <td>
-                Net Bill Amount
-            </td>
-
-            <td>
-                ₹{{ "%.2f"|format(net_bill) }}
-            </td>
-
+            <td>Net Bill Amount</td>
+            <td>₹ {{ net_bill }}</td>
         </tr>
-
-        <!-- CASH RECEIVED -->
 
         <tr class="green-row">
-
-            <td>
-                Cash Received
-            </td>
-
-            <td>
-                ₹{{ "%.2f"|format(received) }}
-            </td>
-
+            <td>Cash Received</td>
+            <td>₹ {{ received }}</td>
         </tr>
 
-        <!-- REMAINING BALANCE -->
+        <tr class="grand-total">
+            <td>Grand Total</td>
+            <td>₹ {{ grand_total }}</td>
+        </tr>
 
         <tr class="balance">
-
-            <td>
-                <strong>
-                    Remaining Balance
-                </strong>
-            </td>
-
-            <td>
-                <strong>
-                    ₹{{ "%.2f"|format(balance) }}
-                </strong>
-            </td>
-
+            <td>Remaining Balance</td>
+            <td>₹ {{ balance }}</td>
         </tr>
-
     </table>
 
-    <br>
-
-    <!-- THANK YOU -->
-
-    <center>
-
-        <h4>
-            Thank You Visit Again
-        </h4>
-
-    </center>
-
 </div>
-
-
-<!-- BUTTONS OUTSIDE INVOICE IMAGE -->
 
 <div class="buttons">
+    <button onclick="shareInvoice()">Share Invoice</button>
 
-    <button type="button" onclick="shareInvoice()">
-        📤 Share Invoice
+    <button class="history" onclick="location.href='/history'">
+        Bill History
     </button>
 
-    <a href="/history">
-        <button type="button">
-            Bill History
-        </button>
-    </a>
+    <button class="dashboard" onclick="location.href='/dashboard'">
+        Dashboard
+    </button>
 
-    <a href="/dashboard">
-        <button type="button">
-            Dashboard
-        </button>
-    </a>
-
-    <a href="/">
-        <button type="button">
-            New Bill
-        </button>
-    </a>
-
+    <button class="new-bill" onclick="location.href='/'">
+        New Bill
+    </button>
 </div>
 
-
-<!-- HTML2CANVAS -->
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
-
-<!-- SHARE INVOICE AS IMAGE -->
-
 <script>
-
 async function shareInvoice() {
-
     const invoice = document.getElementById("invoice");
 
-    if (!invoice) {
-
-        alert("Invoice not found!");
-        return;
-
-    }
-
     try {
-
         const canvas = await html2canvas(invoice, {
-
             scale: 2,
-            useCORS: true,
             backgroundColor: "#ffffff"
-
         });
 
-        const blob = await new Promise(resolve => {
-
-            canvas.toBlob(resolve, "image/png", 1.0);
-
-        });
-
-        if (!blob) {
-
-            throw new Error("Image creation failed");
-
-        }
-
-        const file = new File(
-
-            [blob],
-
-            "J45-Invoice.png",
-
-            {
-                type: "image/png"
+        canvas.toBlob(async function(blob) {
+            if (!blob) {
+                alert("Unable to create invoice image.");
+                return;
             }
 
-        );
+            const file = new File(
+                [blob],
+                "invoice.png",
+                { type: "image/png" }
+            );
 
-        // Mobile sharing
-
-        if (
-
-            navigator.share &&
-            navigator.canShare &&
-            navigator.canShare({ files: [file] })
-
-        ) {
-
-            await navigator.share({
-
-                title: "ஸ்ரீ கருப்பையா துணை",
-
-                text: "Vegetable Billing Invoice",
-
-                files: [file]
-
-            });
-
-        }
-
-        // Desktop image download
-
-        else {
-
-            const link = document.createElement("a");
-
-            link.download = "J45-Invoice.png";
-
-            link.href = URL.createObjectURL(blob);
-
-            document.body.appendChild(link);
-
-            link.click();
-
-            document.body.removeChild(link);
-
-            setTimeout(() => {
-
+            if (
+                navigator.share &&
+                navigator.canShare &&
+                navigator.canShare({ files: [file] })
+            ) {
+                try {
+                    await navigator.share({
+                        title: "Invoice",
+                        text: "Sri Karuppaiya Thunai - Invoice",
+                        files: [file]
+                    });
+                } catch (error) {
+                    if (error.name !== "AbortError") {
+                        alert("Sharing failed. Please try again.");
+                    }
+                }
+            } else {
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.download = "invoice.png";
+                link.click();
                 URL.revokeObjectURL(link.href);
+            }
+        }, "image/png");
 
-            }, 1000);
-
-            alert("Invoice image downloaded successfully!");
-
-        }
-
-    }
-
-    catch (error) {
-
+    } catch (error) {
         console.error(error);
-
-        if (error.name !== "AbortError") {
-
-            alert("Unable to share invoice image.");
-
-        }
-
+        alert("Unable to generate invoice image.");
     }
-
 }
-
 </script>
 
 </body>
-
 </html>
