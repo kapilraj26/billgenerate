@@ -59,16 +59,23 @@
             font-weight: bold;
         }
 
+        /* DATE SIZE INCREASED */
+
         .details span:last-child {
             color: green;
+            font-size: 20px;
+            font-weight: bold;
         }
 
         /* CUSTOMER DETAILS */
 
         .customer-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
             margin: 18px 0 24px;
-            font-size: 16px;
-            line-height: 1.8;
+            font-size: 15px;
         }
 
         /* PRODUCT TABLE */
@@ -211,8 +218,13 @@
                 font-size: 12px;
             }
 
+            .details span:last-child {
+                font-size: 16px;
+            }
+
             .customer-details {
-                font-size: 13px;
+                font-size: 12px;
+                gap: 5px;
             }
 
             .product-table th,
@@ -279,8 +291,15 @@
     <!-- CUSTOMER DETAILS -->
 
     <div class="customer-details">
-        <strong>Customer :</strong> {{ customer }}<br>
-        <strong>Phone :</strong> {{ phone }}
+
+        <span>
+            <strong>Customer :</strong> {{ customer }}
+        </span>
+
+        <span>
+            <strong>Phone :</strong> {{ phone }}
+        </span>
+
     </div>
 
     <!-- PRODUCT TABLE -->
