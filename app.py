@@ -47,7 +47,7 @@ app.secret_key = os.getenv(
 # SHOP DETAILS
 # =========================================================
 Title_name = "ஸ்ரீ கருப்பையா துணை"
-SHOP_NAME = "MANOGARAN"
+SHOP_NAME = "G.மனோகரன்"
 SHOP_PHONE = "9094415150"
 
 
