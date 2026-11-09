@@ -20,6 +20,8 @@
             font-family: Arial, sans-serif;
         }
 
+        /* INVOICE */
+
         .invoice {
             width: 100%;
             max-width: 840px;
@@ -27,6 +29,13 @@
             padding: 34px;
             background: white;
             border: 1px solid #333;
+        }
+
+        /* ALL INVOICE TEXT - 20PX */
+
+        .invoice,
+        .invoice * {
+            font-size: 20px !important;
         }
 
         /* HEADER */
@@ -39,21 +48,18 @@
 
         .tamil-title {
             color: green;
-            font-size: 22px;
             font-weight: bold;
             margin: 0 0 10px;
         }
 
         .shop-name {
             color: green;
-            font-size: 30px;
             font-weight: bold;
             margin: 0 0 10px;
         }
 
         .shop-phone {
             color: black;
-            font-size: 18px;
             font-weight: bold;
             text-align: center;
             margin-bottom: 12px;
@@ -63,7 +69,6 @@
             display: flex;
             justify-content: flex-end;
             color: green;
-            font-size: 20px;
             font-weight: bold;
         }
 
@@ -75,7 +80,6 @@
             align-items: center;
             gap: 10px;
             margin: 18px 0 24px;
-            font-size: 15px;
         }
 
         .customer-name {
@@ -95,7 +99,6 @@
             border: 1px solid #ccc;
             padding: 11px 7px;
             text-align: center;
-            font-size: 15px;
         }
 
         .product-table th {
@@ -107,7 +110,6 @@
         .product-table .total-row td {
             background: #f4f4f4;
             padding: 13px 6px;
-            font-size: 15px;
         }
 
         .total-quantity {
@@ -138,7 +140,6 @@
         .summary-table td {
             border: 1px solid #ccc;
             padding: 11px 8px;
-            font-size: 15px;
             text-align: center;
         }
 
@@ -164,7 +165,6 @@
         .remaining-balance td {
             color: red;
             background: #ffe5e5;
-            font-size: 17px;
             font-weight: bold;
         }
 
@@ -173,7 +173,6 @@
         .thank-you {
             text-align: center;
             margin-top: 30px;
-            font-size: 16px;
             font-weight: bold;
         }
 
@@ -194,7 +193,7 @@
             border-radius: 5px;
             color: white;
             background: #287b36;
-            font-size: 15px;
+            font-size: 20px;
             cursor: pointer;
         }
 
@@ -205,6 +204,7 @@
         /* MOBILE VIEW */
 
         @media (max-width: 480px) {
+
             body {
                 padding: 8px;
             }
@@ -213,24 +213,12 @@
                 padding: 12px;
             }
 
-            .tamil-title {
-                font-size: 18px;
-            }
-
-            .shop-name {
-                font-size: 24px;
-            }
-
-            .shop-phone {
-                font-size: 16px;
-            }
-
-            .date-row {
-                font-size: 16px;
+            .invoice,
+            .invoice * {
+                font-size: 20px !important;
             }
 
             .customer-details {
-                font-size: 12px;
                 gap: 5px;
             }
 
@@ -238,21 +226,17 @@
             .product-table td,
             .summary-table td {
                 padding: 7px 4px;
-                font-size: 12px;
             }
 
             .summary-table {
                 width: 75%;
-            }
-
-            .remaining-balance td {
-                font-size: 13px;
             }
         }
 
         /* PRINT */
 
         @media print {
+
             body {
                 background: white;
                 padding: 0;
