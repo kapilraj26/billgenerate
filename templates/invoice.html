@@ -78,6 +78,11 @@
             font-size: 15px;
         }
 
+        .customer-name {
+            color: red;
+            font-weight: normal;
+        }
+
         /* PRODUCT TABLE */
 
         .product-table {
@@ -101,18 +106,20 @@
 
         .product-table .total-row td {
             background: #f4f4f4;
-            font-weight: bold;
             padding: 13px 6px;
+            font-size: 15px;
         }
 
         .total-quantity {
             text-align: center;
             color: black;
+            font-weight: bold;
         }
 
         .grand-total {
             text-align: center;
-            color: blue;
+            color: black;
+            font-weight: normal;
         }
 
         /* SUMMARY TABLE */
@@ -145,8 +152,8 @@
         }
 
         .net-bill td {
-            color: blue !important;
-            font-weight: bold;
+            color: black;
+            font-weight: normal;
         }
 
         .cash-received td {
@@ -295,7 +302,8 @@
     <div class="customer-details">
 
         <span>
-            <strong>Customer :</strong> {{ customer }}
+            <strong>Customer :</strong>
+            <span class="customer-name">{{ customer }}</span>
         </span>
 
         <span>
