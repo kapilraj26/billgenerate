@@ -15,55 +15,65 @@
 
         body {
             margin: 0;
-            padding: 20px;
+            padding: 16px;
             background: #f2f2f2;
             font-family: Arial, sans-serif;
         }
 
         .invoice {
             width: 100%;
-            max-width: 650px;
+            max-width: 732px;
             margin: auto;
-            padding: 25px;
+            padding: 30px;
             background: white;
             border: 1px solid #333;
         }
 
+        /* HEADER */
+
         .header {
             text-align: center;
             border-bottom: 1px solid #999;
-            padding-bottom: 12px;
+            padding-bottom: 15px;
         }
 
         .tamil-title {
-            color: #8b4513;
-            font-size: 20px;
+            color: green;
+            font-size: 22px;
             font-weight: bold;
-            margin: 0 0 8px;
+            margin: 0 0 10px;
         }
 
         .shop-name {
             color: green;
-            font-size: 27px;
+            font-size: 30px;
             font-weight: bold;
-            margin: 0 0 15px;
+            margin: 0 0 18px;
         }
 
         .details {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 14px;
+            font-size: 16px;
             font-weight: bold;
         }
 
+        .details span:last-child {
+            color: green;
+        }
+
+        /* CUSTOMER DETAILS */
+
         .customer-details {
-            margin: 15px 0 20px;
-            font-size: 14px;
+            margin: 18px 0 24px;
+            font-size: 16px;
             line-height: 1.8;
         }
 
-        table {
+        /* PRODUCT TABLE */
+
+        .product-table {
             width: 100%;
             border-collapse: collapse;
         }
@@ -71,9 +81,9 @@
         .product-table th,
         .product-table td {
             border: 1px solid #ccc;
-            padding: 9px 6px;
+            padding: 11px 7px;
             text-align: center;
-            font-size: 14px;
+            font-size: 15px;
         }
 
         .product-table th {
@@ -85,7 +95,7 @@
         .product-table .total-row td {
             background: #f4f4f4;
             font-weight: bold;
-            padding: 12px 6px;
+            padding: 13px 6px;
         }
 
         .total-quantity {
@@ -98,20 +108,23 @@
             color: blue;
         }
 
+        /* SUMMARY TABLE */
+
         .summary-wrapper {
             display: flex;
             justify-content: flex-end;
-            margin-top: 17px;
+            margin-top: 18px;
         }
 
         .summary-table {
             width: 52%;
+            border-collapse: collapse;
         }
 
         .summary-table td {
             border: 1px solid #ccc;
-            padding: 10px 8px;
-            font-size: 14px;
+            padding: 11px 8px;
+            font-size: 15px;
             text-align: center;
         }
 
@@ -137,20 +150,24 @@
         .remaining-balance td {
             color: red;
             background: #ffe5e5;
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        /* THANK YOU */
+
+        .thank-you {
+            text-align: center;
+            margin-top: 30px;
             font-size: 16px;
             font-weight: bold;
         }
 
-        .thank-you {
-            text-align: center;
-            margin-top: 28px;
-            font-size: 15px;
-            font-weight: bold;
-        }
+        /* BUTTONS */
 
         .buttons {
-            max-width: 650px;
-            margin: 20px auto;
+            max-width: 732px;
+            margin: 22px auto;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
@@ -158,12 +175,12 @@
         }
 
         button {
-            padding: 11px 18px;
+            padding: 12px 19px;
             border: none;
             border-radius: 5px;
             color: white;
             background: #287b36;
-            font-size: 14px;
+            font-size: 15px;
             cursor: pointer;
         }
 
@@ -171,17 +188,7 @@
             opacity: 0.85;
         }
 
-        .history {
-            background: #287b36;
-        }
-
-        .dashboard {
-            background: #287b36;
-        }
-
-        .new-bill {
-            background: #287b36;
-        }
+        /* MOBILE VIEW */
 
         @media (max-width: 480px) {
             body {
@@ -192,8 +199,20 @@
                 padding: 12px;
             }
 
-            .summary-table {
-                width: 70%;
+            .tamil-title {
+                font-size: 18px;
+            }
+
+            .shop-name {
+                font-size: 24px;
+            }
+
+            .details {
+                font-size: 12px;
+            }
+
+            .customer-details {
+                font-size: 13px;
             }
 
             .product-table th,
@@ -203,14 +222,16 @@
                 font-size: 12px;
             }
 
-            .details {
-                font-size: 12px;
+            .summary-table {
+                width: 75%;
             }
 
-            .shop-name {
-                font-size: 23px;
+            .remaining-balance td {
+                font-size: 13px;
             }
         }
+
+        /* PRINT */
 
         @media print {
             body {
@@ -234,6 +255,7 @@
 <div class="invoice" id="invoice">
 
     <!-- SHOP HEADER -->
+
     <div class="header">
 
         <div class="tamil-title">
@@ -246,18 +268,23 @@
 
         <div class="details">
             <span>9094415150</span>
-            <span><strong>Date :</strong> {{ today }}</span>
+
+            <span>
+                <strong>Date :</strong> {{ today }}
+            </span>
         </div>
 
     </div>
 
     <!-- CUSTOMER DETAILS -->
+
     <div class="customer-details">
         <strong>Customer :</strong> {{ customer }}<br>
         <strong>Phone :</strong> {{ phone }}
     </div>
 
     <!-- PRODUCT TABLE -->
+
     <table class="product-table">
 
         <thead>
@@ -281,6 +308,7 @@
             {% endfor %}
 
             <tr class="total-row">
+
                 <td colspan="2" class="total-quantity">
                     Total Quantity : {{ total_qty }}
                 </td>
@@ -288,6 +316,7 @@
                 <td colspan="2" class="grand-total">
                     Grand Total : ₹{{ grand_total }}
                 </td>
+
             </tr>
 
         </tbody>
@@ -295,6 +324,7 @@
     </table>
 
     <!-- BILL SUMMARY -->
+
     <div class="summary-wrapper">
 
         <table class="summary-table">
@@ -324,6 +354,7 @@
     </div>
 
     <!-- THANK YOU -->
+
     <div class="thank-you">
         Thank You Visit Again
     </div>
@@ -331,25 +362,28 @@
 </div>
 
 <!-- ACTION BUTTONS -->
+
 <div class="buttons">
 
     <button onclick="shareInvoice()">
         📤 Share Invoice
     </button>
 
-    <button class="history" onclick="location.href='/history'">
+    <button onclick="location.href='/history'">
         Bill History
     </button>
 
-    <button class="dashboard" onclick="location.href='/dashboard'">
+    <button onclick="location.href='/dashboard'">
         Dashboard
     </button>
 
-    <button class="new-bill" onclick="location.href='/'">
+    <button onclick="location.href='/'">
         New Bill
     </button>
 
 </div>
+
+<!-- SHARE INVOICE -->
 
 <script>
 async function shareInvoice() {
@@ -383,6 +417,7 @@ async function shareInvoice() {
             ) {
 
                 try {
+
                     await navigator.share({
                         title: "Invoice",
                         text: "ஸ்ரீ கருப்பையா துணை - Invoice",
@@ -390,9 +425,11 @@ async function shareInvoice() {
                     });
 
                 } catch (error) {
+
                     if (error.name !== "AbortError") {
                         alert("Sharing failed. Please try again.");
                     }
+
                 }
 
             } else {
@@ -405,6 +442,7 @@ async function shareInvoice() {
                 link.click();
 
                 URL.revokeObjectURL(imageURL);
+
             }
 
         }, "image/png");
