@@ -21,61 +21,102 @@
         }
 
         .invoice {
+            width: 100%;
             max-width: 650px;
             margin: auto;
             padding: 25px;
             background: white;
-            border: 2px solid #333;
+            border: 1px solid #333;
         }
 
         .header {
             text-align: center;
-            border-bottom: 2px solid #333;
+            border-bottom: 1px solid #999;
             padding-bottom: 12px;
         }
 
         .tamil-title {
             color: #8b4513;
-            font-size: 25px;
+            font-size: 20px;
             font-weight: bold;
-            margin-bottom: 8px;
+            margin: 0 0 8px;
         }
 
         .shop-name {
             color: green;
             font-size: 27px;
             font-weight: bold;
-            margin-bottom: 12px;
+            margin: 0 0 15px;
         }
 
         .details {
             display: flex;
             justify-content: space-between;
-            font-size: 15px;
+            align-items: center;
+            font-size: 14px;
             font-weight: bold;
-            gap: 10px;
+        }
+
+        .customer-details {
+            margin: 15px 0 20px;
+            font-size: 14px;
+            line-height: 1.8;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 18px;
         }
 
-        th, td {
-            border: 1px solid #333;
+        .product-table th,
+        .product-table td {
+            border: 1px solid #ccc;
             padding: 9px 6px;
             text-align: center;
             font-size: 14px;
         }
 
-        th {
-            background: #e8e8e8;
+        .product-table th {
+            background: #287b36;
+            color: white;
+            font-weight: bold;
         }
 
-        .summary td:first-child {
-            text-align: left;
+        .product-table .total-row td {
+            background: #f4f4f4;
             font-weight: bold;
+            padding: 12px 6px;
+        }
+
+        .total-quantity {
+            text-align: center;
+            color: black;
+        }
+
+        .grand-total {
+            text-align: center;
+            color: blue;
+        }
+
+        .summary-wrapper {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 17px;
+        }
+
+        .summary-table {
+            width: 52%;
+        }
+
+        .summary-table td {
+            border: 1px solid #ccc;
+            padding: 10px 8px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .summary-table td:first-child {
+            width: 65%;
         }
 
         .previous-balance td {
@@ -83,33 +124,28 @@
             font-weight: bold;
         }
 
-        .blue-row td {
-            color: blue;
+        .net-bill td {
+            color: blue !important;
             font-weight: bold;
         }
 
-        .green-row td {
+        .cash-received td {
             color: green;
             font-weight: bold;
         }
 
-        .grand-total td {
-            color: blue;
-            font-weight: bold;
-            font-size: 16px;
-        }
-
-        .balance td {
+        .remaining-balance td {
             color: red;
             background: #ffe5e5;
-            font-weight: bold;
             font-size: 16px;
+            font-weight: bold;
         }
 
-        .customer-details {
-            margin-top: 15px;
+        .thank-you {
+            text-align: center;
+            margin-top: 28px;
             font-size: 15px;
-            line-height: 1.8;
+            font-weight: bold;
         }
 
         .buttons {
@@ -117,8 +153,8 @@
             margin: 20px auto;
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
             justify-content: center;
+            gap: 10px;
         }
 
         button {
@@ -126,7 +162,7 @@
             border: none;
             border-radius: 5px;
             color: white;
-            background: #198754;
+            background: #287b36;
             font-size: 14px;
             cursor: pointer;
         }
@@ -136,15 +172,44 @@
         }
 
         .history {
-            background: #0d6efd;
+            background: #287b36;
         }
 
         .dashboard {
-            background: #6c757d;
+            background: #287b36;
         }
 
         .new-bill {
-            background: #fd7e14;
+            background: #287b36;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 8px;
+            }
+
+            .invoice {
+                padding: 12px;
+            }
+
+            .summary-table {
+                width: 70%;
+            }
+
+            .product-table th,
+            .product-table td,
+            .summary-table td {
+                padding: 7px 4px;
+                font-size: 12px;
+            }
+
+            .details {
+                font-size: 12px;
+            }
+
+            .shop-name {
+                font-size: 23px;
+            }
         }
 
         @media print {
@@ -154,7 +219,7 @@
             }
 
             .invoice {
-                border: 2px solid #333;
+                border: 1px solid #333;
             }
 
             .buttons {
@@ -168,82 +233,109 @@
 
 <div class="invoice" id="invoice">
 
+    <!-- SHOP HEADER -->
     <div class="header">
-        <div class="tamil-title">ஸ்ரீ கருப்பையா துணை</div>
 
-        <div class="shop-name">G.மனோகரன்</div>
+        <div class="tamil-title">
+            ஸ்ரீ கருப்பையா துணை
+        </div>
+
+        <div class="shop-name">
+            G.மனோகரன்
+        </div>
 
         <div class="details">
             <span>9094415150</span>
             <span><strong>Date :</strong> {{ today }}</span>
         </div>
+
     </div>
 
+    <!-- CUSTOMER DETAILS -->
     <div class="customer-details">
-        <strong>Customer Name:</strong> {{ customer }}<br>
-        <strong>Phone Number:</strong> {{ phone }}
+        <strong>Customer :</strong> {{ customer }}<br>
+        <strong>Phone :</strong> {{ phone }}
     </div>
 
-    <table>
+    <!-- PRODUCT TABLE -->
+    <table class="product-table">
+
         <thead>
             <tr>
-                <th>S.No</th>
                 <th>Product</th>
-                <th>Quantity (Kg)</th>
+                <th>Quantity</th>
                 <th>Rate</th>
                 <th>Amount</th>
             </tr>
         </thead>
 
         <tbody>
+
             {% for item in items %}
             <tr>
-                <td>{{ loop.index }}</td>
                 <td>{{ item.product }}</td>
                 <td>{{ item.qty }}</td>
-                <td>{{ item.rate }}</td>
-                <td>{{ item.amount }}</td>
+                <td>₹{{ item.rate }}</td>
+                <td>₹{{ item.amount }}</td>
             </tr>
             {% endfor %}
+
+            <tr class="total-row">
+                <td colspan="2" class="total-quantity">
+                    Total Quantity : {{ total_qty }}
+                </td>
+
+                <td colspan="2" class="grand-total">
+                    Grand Total : ₹{{ grand_total }}
+                </td>
+            </tr>
+
         </tbody>
+
     </table>
 
-    <table class="summary">
-        <tr>
-            <td>Total Quantity</td>
-            <td>{{ total_qty }}</td>
-        </tr>
+    <!-- BILL SUMMARY -->
+    <div class="summary-wrapper">
 
-        <tr class="previous-balance">
-            <td>Previous Balance</td>
-            <td>₹ {{ pending }}</td>
-        </tr>
+        <table class="summary-table">
 
-        <tr class="blue-row">
-            <td>Net Bill Amount</td>
-            <td>₹ {{ net_bill }}</td>
-        </tr>
+            <tr class="previous-balance">
+                <td>Previous Balance</td>
+                <td>₹ {{ pending }}</td>
+            </tr>
 
-        <tr class="green-row">
-            <td>Cash Received</td>
-            <td>₹ {{ received }}</td>
-        </tr>
+            <tr class="net-bill">
+                <td>Net Bill Amount</td>
+                <td>₹ {{ net_bill }}</td>
+            </tr>
 
-        <tr class="grand-total">
-            <td>Grand Total</td>
-            <td>₹ {{ grand_total }}</td>
-        </tr>
+            <tr class="cash-received">
+                <td>Cash Received</td>
+                <td>₹ {{ received }}</td>
+            </tr>
 
-        <tr class="balance">
-            <td>Remaining Balance</td>
-            <td>₹ {{ balance }}</td>
-        </tr>
-    </table>
+            <tr class="remaining-balance">
+                <td>Remaining Balance</td>
+                <td>₹ {{ balance }}</td>
+            </tr>
+
+        </table>
+
+    </div>
+
+    <!-- THANK YOU -->
+    <div class="thank-you">
+        Thank You Visit Again
+    </div>
 
 </div>
 
+<!-- ACTION BUTTONS -->
 <div class="buttons">
-    <button onclick="shareInvoice()">Share Invoice</button>
+
+    <button onclick="shareInvoice()">
+        📤 Share Invoice
+    </button>
 
     <button class="history" onclick="location.href='/history'">
         Bill History
@@ -256,19 +348,23 @@
     <button class="new-bill" onclick="location.href='/'">
         New Bill
     </button>
+
 </div>
 
 <script>
 async function shareInvoice() {
+
     const invoice = document.getElementById("invoice");
 
     try {
+
         const canvas = await html2canvas(invoice, {
             scale: 2,
             backgroundColor: "#ffffff"
         });
 
         canvas.toBlob(async function(blob) {
+
             if (!blob) {
                 alert("Unable to create invoice image.");
                 return;
@@ -285,29 +381,39 @@ async function shareInvoice() {
                 navigator.canShare &&
                 navigator.canShare({ files: [file] })
             ) {
+
                 try {
                     await navigator.share({
                         title: "Invoice",
-                        text: "Sri Karuppaiya Thunai - Invoice",
+                        text: "ஸ்ரீ கருப்பையா துணை - Invoice",
                         files: [file]
                     });
+
                 } catch (error) {
                     if (error.name !== "AbortError") {
                         alert("Sharing failed. Please try again.");
                     }
                 }
+
             } else {
+
                 const link = document.createElement("a");
-                link.href = URL.createObjectURL(blob);
+                const imageURL = URL.createObjectURL(blob);
+
+                link.href = imageURL;
                 link.download = "invoice.png";
                 link.click();
-                URL.revokeObjectURL(link.href);
+
+                URL.revokeObjectURL(imageURL);
             }
+
         }, "image/png");
 
     } catch (error) {
+
         console.error(error);
         alert("Unable to generate invoice image.");
+
     }
 }
 </script>
