@@ -1,322 +1,35 @@
+<!-- Invoice Header -->
 
-<!DOCTYPE html>
-<html lang="en">
+<center>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>ஸ்ரீ கருப்பையா துணை - Invoice</title>
-
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
-
-    <style>
-        .bill {
-            background: white;
-            padding: 20px;
-        }
-
-        .top {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 15px;
-            font-size: 14px;
-        }
-
-        .top-left p,
-        .top-right p {
-            margin: 5px 0;
-        }
-
-        .top-right {
-            text-align: right;
-        }
-
-        .shop-title {
-            text-align: center;
-            color: #8B4513;
-            margin: 12px 0 20px;
-        }
-
-        .shop-name {
-            text-align: center;
-            color: green;
-        }
-
-        .grand-total {
-            color: blue;
-            font-weight: bold;
-        }
-
-        .green-row td {
-            color: green;
-            font-weight: bold;
-        }
-
-        .red-row td {
-            color: red;
-            font-weight: bold;
-        }
-
-        .balance td {
-            background: #ffe5e5;
-            color: red;
-            font-weight: bold;
-        }
-
-        .summary {
-            width: 50%;
-            margin-left: auto;
-        }
-
-        .buttons {
-            text-align: center;
-            margin: 20px;
-        }
-    </style>
-
-</head>
-
-<body>
-
-<div class="bill" id="invoice">
-
-    <!-- Tamil Title -->
-
-    <h3 class="shop-title">
+    <h3 style="color:#8B4513;">
         ஸ்ரீ கருப்பையா துணை
     </h3>
 
-    <!-- Date, Phone and Bill Number -->
+    <h1 style="color:green;">
+        G.மனோகரன்
+    </h1>
 
-    <div class="top">
+</center>
 
-        <div class="top-left">
+<div style="display:flex;
+            justify-content:space-between;
+            align-items:center;">
 
-            <p>
-                <strong>Date :</strong>
-                {{ today }}
-            </p>
+    <strong>9094415150</strong>
 
-            <p>
-                <strong>Bill No :</strong>
-                {{ bill_no }}
-            </p>
-
-        </div>
-
-        <div class="top-right">
-
-            <p>
-                <strong>Phone :</strong>
-                {{ shop_phone }}
-            </p>
-
-        </div>
-
-    </div>
-
-    <!-- Shop Details -->
-
-    <h1 class="shop-name">{{ shop }}</h1>
-
-    <hr>
-
-    <!-- Customer Details -->
-
-    <div class="customer">
-
-        <p>
-            <strong>Customer :</strong>
-            {{ customer }}
-        </p>
-
-        <p>
-            <strong>Phone :</strong>
-            {{ phone }}
-        </p>
-
-    </div>
-
-    <br>
-
-    <!-- Product Table -->
-
-    <table>
-
-        <tr>
-            <th>Product</th>
-            <th>Quantity</th>
-            <th>Rate</th>
-            <th>Amount</th>
-        </tr>
-
-        {% for item in items %}
-
-        <tr>
-            <td>{{ item.product }}</td>
-
-            <td>{{ "%.2f"|format(item.qty) }}</td>
-
-            <td>₹{{ "%.2f"|format(item.rate) }}</td>
-
-            <td>₹{{ "%.2f"|format(item.amount) }}</td>
-        </tr>
-
-        {% endfor %}
-
-        <tr class="totalrow">
-
-            <td colspan="2">
-                <strong>
-                    Total Quantity :
-                    {{ "%.2f"|format(total_qty) }}
-                </strong>
-            </td>
-
-            <td colspan="2" class="grand-total">
-                <strong>
-                    Grand Total :
-                    ₹{{ "%.2f"|format(grand_total) }}
-                </strong>
-            </td>
-
-        </tr>
-
-    </table>
-
-    <br>
-
-    <!-- Bill Summary -->
-
-    <table class="summary">
-
-        <tr class="red-row">
-            <td>Previous Balance</td>
-            <td>₹{{ "%.2f"|format(pending) }}</td>
-        </tr>
-
-        <tr class="green-row">
-            <td>Net Bill Amount</td>
-            <td>₹{{ "%.2f"|format(net_bill) }}</td>
-        </tr>
-
-        <tr class="green-row">
-            <td>Cash Received</td>
-            <td>₹{{ "%.2f"|format(received) }}</td>
-        </tr>
-
-        <tr class="balance">
-            <td>Remaining Balance</td>
-            <td>₹{{ "%.2f"|format(balance) }}</td>
-        </tr>
-
-    </table>
-
-    <br>
-
-    <center>
-        <h4>Thank You Visit Again</h4>
-    </center>
+    <strong>
+        Date : {{ today }}
+    </strong>
 
 </div>
 
-<!-- Buttons -->
+<div style="text-align:right; margin-top:10px;">
 
-<div class="buttons">
-
-    <button type="button" onclick="shareInvoice()">
-        📤 Share Invoice
-    </button>
-
-    <a href="/history">
-        <button type="button">Bill History</button>
-    </a>
-
-    <a href="/dashboard">
-        <button type="button">Dashboard</button>
-    </a>
-
-    <a href="/">
-        <button type="button">New Bill</button>
-    </a>
+    <strong>
+        Bill No : {{ bill_no }}
+    </strong>
 
 </div>
 
-<!-- Image Sharing -->
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
-<script>
-
-async function shareInvoice() {
-
-    const invoice = document.getElementById("invoice");
-
-    try {
-
-        const canvas = await html2canvas(invoice, {
-            scale: 2,
-            useCORS: true,
-            backgroundColor: "#ffffff"
-        });
-
-        const blob = await new Promise(resolve => {
-            canvas.toBlob(resolve, "image/png", 1.0);
-        });
-
-        if (!blob) {
-            throw new Error("Image creation failed");
-        }
-
-        const file = new File(
-            [blob],
-            "J45-Invoice.png",
-            { type: "image/png" }
-        );
-
-        if (
-            navigator.share &&
-            navigator.canShare &&
-            navigator.canShare({ files: [file] })
-        ) {
-
-            await navigator.share({
-                title: "ஸ்ரீ கருப்பையா துணை",
-                text: "Vegetable Billing Invoice",
-                files: [file]
-            });
-
-        } else {
-
-            const link = document.createElement("a");
-
-            link.download = "J45-Invoice.png";
-            link.href = URL.createObjectURL(blob);
-
-            link.click();
-
-            URL.revokeObjectURL(link.href);
-
-            alert("Invoice image downloaded.");
-
-        }
-
-    } catch (error) {
-
-        console.error(error);
-
-        if (error.name !== "AbortError") {
-            alert("Unable to share invoice image.");
-        }
-
-    }
-
-}
-
-</script>
-
-</body>
-</html>
+<hr>
