@@ -91,20 +91,14 @@
 
         .product-table {
             width: 100%;
-            table-layout: fixed;
             border-collapse: collapse;
         }
 
-        /* FOUR EQUAL COLUMNS */
-
         .product-table th,
         .product-table td {
-            width: 25%;
             border: 1px solid #ccc;
             padding: 11px 7px;
             text-align: center;
-            vertical-align: middle;
-            overflow-wrap: break-word;
         }
 
         .product-table th {
@@ -140,7 +134,6 @@
 
         .summary-table {
             width: 52%;
-            table-layout: fixed;
             border-collapse: collapse;
         }
 
@@ -148,15 +141,10 @@
             border: 1px solid #ccc;
             padding: 11px 8px;
             text-align: center;
-            vertical-align: middle;
         }
 
         .summary-table td:first-child {
             width: 65%;
-        }
-
-        .summary-table td:last-child {
-            width: 35%;
         }
 
         .previous-balance td {
@@ -312,13 +300,6 @@
 
     <table class="product-table">
 
-        <colgroup>
-            <col style="width: 25%;">
-            <col style="width: 25%;">
-            <col style="width: 25%;">
-            <col style="width: 25%;">
-        </colgroup>
-
         <thead>
             <tr>
                 <th>Product</th>
@@ -452,7 +433,7 @@ async function shareInvoice() {
 
                     await navigator.share({
                         title: "Invoice",
-                        text: "ஸ்ரீ கருப்பையா துணை - Invoice",
+                        text: "Invoice",
                         files: [file]
                     });
 
