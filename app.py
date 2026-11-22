@@ -131,9 +131,9 @@ def index():
             """
             SELECT *
             FROM customers
-            WHERE customer=%s
+            WHERE customer_name=%s
             """,
-            (customer,)
+            (customer_name,)
         )
 
         customer_data = cursor.fetchone()
