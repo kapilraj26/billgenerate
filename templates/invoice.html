@@ -29,7 +29,6 @@
             padding: 34px;
             background: white;
             border: 1px solid #333;
-            box-sizing: border-box;
         }
 
         /* ALL INVOICE TEXT - 17PX */
@@ -96,6 +95,8 @@
             border-collapse: collapse;
         }
 
+        /* FOUR EQUAL COLUMNS */
+
         .product-table th,
         .product-table td {
             width: 25%;
@@ -129,27 +130,33 @@
             font-weight: bold;
         }
 
-        /* SUMMARY TABLE - SAME WIDTH */
+        /* SUMMARY TABLE */
 
         .summary-wrapper {
-            display: block;
-            width: 100%;
+            display: flex;
+            justify-content: flex-end;
             margin-top: 18px;
         }
 
         .summary-table {
-            width: 100%;
+            width: 52%;
             table-layout: fixed;
             border-collapse: collapse;
         }
 
         .summary-table td {
-            width: 50%;
             border: 1px solid #ccc;
             padding: 11px 8px;
             text-align: center;
             vertical-align: middle;
-            overflow-wrap: break-word;
+        }
+
+        .summary-table td:first-child {
+            width: 65%;
+        }
+
+        .summary-table td:last-child {
+            width: 35%;
         }
 
         .previous-balance td {
@@ -234,7 +241,7 @@
             }
 
             .summary-table {
-                width: 100%;
+                width: 75%;
             }
         }
 
@@ -248,8 +255,6 @@
             }
 
             .invoice {
-                width: 100%;
-                max-width: 840px;
                 border: 1px solid #333;
             }
 
