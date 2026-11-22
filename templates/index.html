@@ -3,61 +3,38 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>
-        Vegetable Credit Sales Billing System
-    </title>
+    <title>Vegetable Credit Sales Billing System</title>
 
     <link rel="stylesheet"
-          href="{{ url_for('static',
-          filename='style.css') }}">
-
+          href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
 
 <div class="container">
 
-    <h1>
-        Vegetable Credit Sales Billing System
-    </h1>
+    <h1>Vegetable Credit Sales Billing System</h1>
 
     <form method="POST">
 
         <!-- Language -->
-
         <div class="row">
-
             <div class="input-box">
 
-                <label>
-                    Language
-                </label>
+                <label>Language</label>
 
-                <select id="language"
-                        onchange="changeLanguage()">
-
-                    <option value="en">
-                        English
-                    </option>
-
-                    <option value="ta">
-                        தமிழ்
-                    </option>
-
+                <select id="language" onchange="changeLanguage()">
+                    <option value="en">English</option>
+                    <option value="ta">தமிழ்</option>
                 </select>
 
             </div>
-
         </div>
 
         <!-- Customer Details -->
-
         <div class="row">
 
             <div class="input-box">
@@ -80,23 +57,9 @@
 
             </div>
 
-            <div class="input-box">
-
-                <label id="lbl_phone">
-                    Phone Number
-                </label>
-
-                <input type="text"
-                       id="phone"
-                       name="phone"
-                       required>
-
-            </div>
-
         </div>
 
         <!-- Balance -->
-
         <div class="row">
 
             <div class="input-box">
@@ -127,30 +90,16 @@
 
         </div>
 
-        <h2 id="lbl_product">
-            Product Details
-        </h2>
+        <h2 id="lbl_product">Product Details</h2>
 
+        <!-- Product Table -->
         <table id="items">
 
             <tr>
-
-                <th id="th_product">
-                    Product
-                </th>
-
-                <th id="th_qty">
-                    Quantity
-                </th>
-
-                <th id="th_rate">
-                    Rate
-                </th>
-
-                <th id="th_remove">
-                    Remove
-                </th>
-
+                <th id="th_product">Product</th>
+                <th id="th_qty">Quantity</th>
+                <th id="th_rate">Rate</th>
+                <th id="th_remove">Remove</th>
             </tr>
 
             <tr>
@@ -176,12 +125,10 @@
                 </td>
 
                 <td>
-
                     <button type="button"
                             onclick="removeRow(this)">
                         X
                     </button>
-
                 </td>
 
             </tr>
@@ -190,8 +137,7 @@
 
         <br>
 
-        <button type="button"
-                onclick="addRow()">
+        <button type="button" onclick="addRow()">
             Add Product
         </button>
 
@@ -205,72 +151,53 @@
 
 <script>
 
+// Add Product Row
 function addRow() {
 
-    let table =
-        document.getElementById("items");
+    let table = document.getElementById("items");
 
-    let row =
-        table.insertRow();
+    let row = table.insertRow();
 
     row.innerHTML = `
-
         <td>
-            <input type="text"
-                   name="product[]"
-                   required>
+            <input type="text" name="product[]" required>
         </td>
 
         <td>
-            <input type="number"
-                   step="0.01"
-                   name="qty[]"
-                   required>
+            <input type="number" step="0.01" name="qty[]" required>
         </td>
 
         <td>
-            <input type="number"
-                   step="0.01"
-                   name="rate[]"
-                   required>
+            <input type="number" step="0.01" name="rate[]" required>
         </td>
 
         <td>
-            <button type="button"
-                    onclick="removeRow(this)">
+            <button type="button" onclick="removeRow(this)">
                 X
             </button>
         </td>
-
     `;
 }
 
+
+// Remove Product Row
 function removeRow(button) {
 
-    let row =
-        button.parentNode.parentNode;
+    let row = button.parentNode.parentNode;
 
-    let table =
-        document.getElementById("items");
+    let table = document.getElementById("items");
 
     if (table.rows.length > 2) {
         row.remove();
     }
 }
 
-/* CUSTOMER SEARCH BY NAME */
 
-const customerInput =
-    document.getElementById("customer");
+// CUSTOMER SEARCH BY NAME
 
-const phoneInput =
-    document.getElementById("phone");
-
-const pendingInput =
-    document.getElementById("pending");
-
-const customerStatus =
-    document.getElementById("customerStatus");
+const customerInput = document.getElementById("customer");
+const pendingInput = document.getElementById("pending");
+const customerStatus = document.getElementById("customerStatus");
 
 let customerSearchRequest = null;
 
@@ -292,11 +219,8 @@ customerInput.addEventListener("blur", async function () {
     try {
 
         const response = await fetch(
-            "/customer/name/" +
-            encodeURIComponent(customerName),
-            {
-                signal: customerSearchRequest.signal
-            }
+            "/customer/name/" + encodeURIComponent(customerName),
+            { signal: customerSearchRequest.signal }
         );
 
         if (!response.ok) {
@@ -308,23 +232,16 @@ customerInput.addEventListener("blur", async function () {
         if (data.found) {
 
             customerInput.value = data.name;
-
-            phoneInput.value = data.phone;
-
             pendingInput.value = data.balance;
 
-            customerStatus.textContent =
-                "Existing customer found";
-
+            customerStatus.textContent = "Existing customer found";
             customerStatus.style.color = "green";
 
         } else {
 
             pendingInput.value = 0;
 
-            customerStatus.textContent =
-                "New customer";
-
+            customerStatus.textContent = "New customer";
             customerStatus.style.color = "blue";
 
         }
@@ -332,138 +249,86 @@ customerInput.addEventListener("blur", async function () {
     } catch (error) {
 
         if (error.name !== "AbortError") {
-
             console.error(error);
 
-            customerStatus.textContent =
-                "Unable to search customer";
-
+            customerStatus.textContent = "Unable to search customer";
             customerStatus.style.color = "red";
         }
 
     }
 });
 
-/* CLEAR OLD DETAILS WHEN NAME IS EDITED */
 
+// Clear old balance when customer name changes
 customerInput.addEventListener("input", function () {
 
-    phoneInput.value = "";
-
     pendingInput.value = 0;
-
     customerStatus.textContent = "";
 
 });
 
-/* LANGUAGE */
+
+// LANGUAGE SWITCH
 
 function changeLanguage() {
 
-    let lang =
-        document.getElementById(
-            "language"
-        ).value;
+    let lang = document.getElementById("language").value;
 
     if (lang === "ta") {
 
-        document.getElementById(
-            "lbl_phone"
-        ).innerHTML =
-        "தொலைபேசி எண்";
+        document.getElementById("lbl_customer").innerHTML =
+            "வாடிக்கையாளர் பெயர்";
 
-        document.getElementById(
-            "lbl_customer"
-        ).innerHTML =
-        "வாடிக்கையாளர் பெயர்";
+        document.getElementById("lbl_pending").innerHTML =
+            "முந்தைய நிலுவை";
 
-        document.getElementById(
-            "lbl_pending"
-        ).innerHTML =
-        "முந்தைய நிலுவை";
+        document.getElementById("lbl_received").innerHTML =
+            "பெறப்பட்ட தொகை";
 
-        document.getElementById(
-            "lbl_received"
-        ).innerHTML =
-        "பெறப்பட்ட தொகை";
+        document.getElementById("lbl_product").innerHTML =
+            "பொருள் விவரங்கள்";
 
-        document.getElementById(
-            "lbl_product"
-        ).innerHTML =
-        "பொருள் விவரங்கள்";
+        document.getElementById("th_product").innerHTML =
+            "பொருள்";
 
-        document.getElementById(
-            "th_product"
-        ).innerHTML =
-        "பொருள்";
+        document.getElementById("th_qty").innerHTML =
+            "அளவு";
 
-        document.getElementById(
-            "th_qty"
-        ).innerHTML =
-        "அளவு";
+        document.getElementById("th_rate").innerHTML =
+            "விலை";
 
-        document.getElementById(
-            "th_rate"
-        ).innerHTML =
-        "விலை";
+        document.getElementById("th_remove").innerHTML =
+            "நீக்கு";
 
-        document.getElementById(
-            "th_remove"
-        ).innerHTML =
-        "நீக்கு";
-    }
+    } else {
 
-    else {
+        document.getElementById("lbl_customer").innerHTML =
+            "Customer Name";
 
-        document.getElementById(
-            "lbl_phone"
-        ).innerHTML =
-        "Phone Number";
+        document.getElementById("lbl_pending").innerHTML =
+            "Previous Balance";
 
-        document.getElementById(
-            "lbl_customer"
-        ).innerHTML =
-        "Customer Name";
+        document.getElementById("lbl_received").innerHTML =
+            "Cash Received";
 
-        document.getElementById(
-            "lbl_pending"
-        ).innerHTML =
-        "Previous Balance";
+        document.getElementById("lbl_product").innerHTML =
+            "Product Details";
 
-        document.getElementById(
-            "lbl_received"
-        ).innerHTML =
-        "Cash Received";
+        document.getElementById("th_product").innerHTML =
+            "Product";
 
-        document.getElementById(
-            "lbl_product"
-        ).innerHTML =
-        "Product Details";
+        document.getElementById("th_qty").innerHTML =
+            "Quantity";
 
-        document.getElementById(
-            "th_product"
-        ).innerHTML =
-        "Product";
+        document.getElementById("th_rate").innerHTML =
+            "Rate";
 
-        document.getElementById(
-            "th_qty"
-        ).innerHTML =
-        "Quantity";
-
-        document.getElementById(
-            "th_rate"
-        ).innerHTML =
-        "Rate";
-
-        document.getElementById(
-            "th_remove"
-        ).innerHTML =
-        "Remove";
+        document.getElementById("th_remove").innerHTML =
+            "Remove";
     }
 }
 
 </script>
 
 </body>
-
 </html>
