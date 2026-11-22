@@ -127,13 +127,18 @@ def index():
         # CUSTOMER SEARCH
         # -------------------------------------------------
 
+        if not customer:
+            return "Customer name is required.", 400
+
         cursor.execute(
             """
             SELECT *
             FROM customers
-            WHERE customer_name=%s
+            WHERE LOWER(TRIM(customer_name)) = LOWER(TRIM(%s))
+            ORDER BY id ASC
+            LIMIT 1
             """,
-            (customer_name,)
+            (customer,)
         )
 
         customer_data = cursor.fetchone()
@@ -146,6 +151,9 @@ def index():
         if customer_data:
 
             customer_id = customer_data["id"]
+
+            # Use the phone number already saved for this customer.
+            phone = customer_data.get("phone") or phone
 
             pending = float(
                 customer_data["pending_balance"] or 0
@@ -436,46 +444,43 @@ def index():
 # CUSTOMER SEARCH
 # =========================================================
 
-@app.route("/customer/<phone>")
-def customer(phone):
+@app.route("/customer/name/<path:customer_name>")
+def search_customer_by_name(customer_name):
 
     cursor.execute(
         """
-        SELECT *
+        SELECT
+            id,
+            customer_name,
+            phone,
+            pending_balance
         FROM customers
-        WHERE phone=%s
+        WHERE LOWER(TRIM(customer_name)) = LOWER(TRIM(%s))
+        ORDER BY id ASC
+        LIMIT 1
         """,
-        (phone,)
+        (customer_name.strip(),)
     )
 
     customer_data = cursor.fetchone()
 
-
     if customer_data:
+        return jsonify({
+            "found": True,
+            "id": customer_data["id"],
+            "name": customer_data["customer_name"],
+            "phone": customer_data["phone"] or "",
+            "balance": float(
+                customer_data["pending_balance"] or 0
+            )
+        })
 
-        return jsonify(
-            {
-                "name":
-                    customer_data[
-                        "customer_name"
-                    ],
-
-                "balance":
-                    float(
-                        customer_data[
-                            "pending_balance"
-                        ] or 0
-                    )
-            }
-        )
-
-
-    return jsonify(
-        {
-            "name": "",
-            "balance": 0
-        }
-    )
+    return jsonify({
+        "found": False,
+        "name": "",
+        "phone": "",
+        "balance": 0
+    })
 
 
 # =========================================================
