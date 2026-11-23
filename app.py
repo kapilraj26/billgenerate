@@ -114,10 +114,9 @@ def index():
             ""
         ).strip()
 
-        phone = request.form.get(
-            "phone",
-            ""
-        ).strip()
+        # Phone number is no longer collected on the billing form.
+        # Existing customers retain their saved phone number; new customers use NULL.
+        phone = ""
 
         received = float(
             request.form.get("received") or 0
@@ -178,7 +177,7 @@ def index():
                 """,
                 (
                     customer,
-                    phone,
+                    None,
                     0
                 )
             )
