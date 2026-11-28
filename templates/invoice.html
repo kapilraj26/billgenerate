@@ -20,8 +20,6 @@
             font-family: Arial, sans-serif;
         }
 
-        /* INVOICE */
-
         .invoice {
             width: 100%;
             max-width: 840px;
@@ -31,14 +29,10 @@
             border: 1px solid #333;
         }
 
-        /* ALL INVOICE TEXT - 17PX */
-
         .invoice,
         .invoice * {
             font-size: 17px !important;
         }
-
-        /* HEADER */
 
         .header {
             text-align: center;
@@ -46,12 +40,7 @@
             padding-bottom: 15px;
         }
 
-        .tamil-title {
-            color: green;
-            font-weight: bold;
-            margin: 0 0 10px;
-        }
-
+        .tamil-title,
         .shop-name {
             color: green;
             font-weight: bold;
@@ -72,8 +61,6 @@
             font-weight: bold;
         }
 
-        /* CUSTOMER DETAILS */
-
         .customer-details {
             display: flex;
             justify-content: space-between;
@@ -86,8 +73,6 @@
             color: red;
             font-weight: bold;
         }
-
-        /* PRODUCT TABLE */
 
         .product-table {
             width: 100%;
@@ -123,8 +108,6 @@
             color: blue;
             font-weight: bold;
         }
-
-        /* SUMMARY TABLE */
 
         .summary-wrapper {
             display: flex;
@@ -168,15 +151,11 @@
             font-weight: bold;
         }
 
-        /* THANK YOU */
-
         .thank-you {
             text-align: center;
             margin-top: 30px;
             font-weight: bold;
         }
-
-        /* BUTTONS */
 
         .buttons {
             max-width: 840px;
@@ -201,10 +180,12 @@
             opacity: 0.85;
         }
 
-        /* MOBILE VIEW */
+        .whatsapp-button {
+            background: #25D366;
+            color: white;
+        }
 
         @media (max-width: 480px) {
-
             body {
                 padding: 8px;
             }
@@ -233,10 +214,7 @@
             }
         }
 
-        /* PRINT */
-
         @media print {
-
             body {
                 background: white;
                 padding: 0;
@@ -374,94 +352,190 @@
 
 <div class="buttons">
 
-    <button onclick="shareInvoice()">
+    <button type="button" onclick="shareInvoice()">
         📤 Share Invoice
     </button>
 
-    <button onclick="location.href='/history'">
+    <button type="button"
+            class="whatsapp-button"
+            onclick="shareInvoiceToWhatsApp()">
+        🟢 Share on WhatsApp
+    </button>
+
+    <button type="button" onclick="location.href='/history'">
         Bill History
     </button>
 
-    <button onclick="location.href='/dashboard'">
+    <button type="button" onclick="location.href='/dashboard'">
         Dashboard
     </button>
 
-    <button onclick="location.href='/'">
+    <button type="button" onclick="location.href='/'">
         New Bill
     </button>
 
 </div>
 
-<!-- SHARE INVOICE -->
+<!-- SHARE FUNCTIONS -->
 
 <script>
-async function shareInvoice() {
+
+// Convert invoice into image
+
+async function createInvoiceImage() {
 
     const invoice = document.getElementById("invoice");
 
+    if (!invoice) {
+        throw new Error("Invoice not found.");
+    }
+
+    const canvas = await html2canvas(invoice, {
+        scale: 2,
+        backgroundColor: "#ffffff",
+        useCORS: true
+    });
+
+    const blob = await new Promise(resolve => {
+        canvas.toBlob(resolve, "image/png", 1.0);
+    });
+
+    if (!blob) {
+        throw new Error("Unable to create invoice image.");
+    }
+
+    return new File(
+        [blob],
+        "invoice.png",
+        { type: "image/png" }
+    );
+}
+
+
+// Existing Share Invoice
+
+async function shareInvoice() {
+
     try {
 
-        const canvas = await html2canvas(invoice, {
-            scale: 2,
-            backgroundColor: "#ffffff"
-        });
+        const file = await createInvoiceImage();
 
-        canvas.toBlob(async function(blob) {
+        if (
+            navigator.share &&
+            navigator.canShare &&
+            navigator.canShare({ files: [file] })
+        ) {
 
-            if (!blob) {
-                alert("Unable to create invoice image.");
-                return;
-            }
+            await navigator.share({
+                title: "Invoice",
+                files: [file]
+            });
 
-            const file = new File(
-                [blob],
-                "invoice.png",
-                { type: "image/png" }
-            );
+        } else {
 
-            if (
-                navigator.share &&
-                navigator.canShare &&
-                navigator.canShare({ files: [file] })
-            ) {
+            downloadInvoice(file);
 
-                try {
+            alert("Invoice image downloaded.");
 
-                    await navigator.share({
-                        title: "Invoice",
-                        files: [file]
-                    });
-
-                } catch (error) {
-
-                    if (error.name !== "AbortError") {
-                        alert("Sharing failed. Please try again.");
-                    }
-
-                }
-
-            } else {
-
-                const link = document.createElement("a");
-                const imageURL = URL.createObjectURL(blob);
-
-                link.href = imageURL;
-                link.download = "invoice.png";
-                link.click();
-
-                URL.revokeObjectURL(imageURL);
-
-            }
-
-        }, "image/png");
+        }
 
     } catch (error) {
 
         console.error(error);
-        alert("Unable to generate invoice image.");
+
+        if (error.name !== "AbortError") {
+            alert("Sharing failed. Please try again.");
+        }
 
     }
 }
+
+
+// WhatsApp Share
+
+async function shareInvoiceToWhatsApp() {
+
+    try {
+
+        const file = await createInvoiceImage();
+
+        const message =
+            "Invoice {{ bill_no }} for {{ customer }}. " +
+            "Grand Total: ₹{{ grand_total }}. " +
+            "Remaining Balance: ₹{{ balance }}.";
+
+        // Mobile browser: share image using native share sheet.
+        // Choose WhatsApp from the available apps.
+
+        if (
+            navigator.share &&
+            navigator.canShare &&
+            navigator.canShare({ files: [file] })
+        ) {
+
+            await navigator.share({
+                title: "Invoice",
+                text: message,
+                files: [file]
+            });
+
+        } else {
+
+            // Desktop fallback
+
+            downloadInvoice(file);
+
+            const whatsappURL =
+                "https://wa.me/?text=" +
+                encodeURIComponent(message);
+
+            window.open(
+                whatsappURL,
+                "_blank",
+                "noopener"
+            );
+
+            alert(
+                "Invoice image downloaded. Attach invoice.png in WhatsApp and send."
+            );
+
+        }
+
+    } catch (error) {
+
+        console.error(error);
+
+        if (error.name !== "AbortError") {
+            alert("Unable to share invoice on WhatsApp.");
+        }
+
+    }
+}
+
+
+// Download invoice image
+
+function downloadInvoice(file) {
+
+    const imageURL = URL.createObjectURL(file);
+
+    const link = document.createElement("a");
+
+    link.href = imageURL;
+    link.download = "invoice.png";
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    link.remove();
+
+    setTimeout(() => {
+        URL.revokeObjectURL(imageURL);
+    }, 1500);
+
+}
+
 </script>
 
 </body>
